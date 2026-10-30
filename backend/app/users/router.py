@@ -29,7 +29,7 @@ def ensure_self(current_user: UserPublic, user_id: int) -> None:
     )
 
 
-@router.post("", response_model=UserPublic, status_code=status.HTTP_200_OK)
+@router.post("", response_model=UserPublic, status_code=status.HTTP_201_CREATED)
 def register_user(user: UserCreate) -> UserPublic:
     email = str(user.email).lower()
     if get_by_email(email) is not None:
