@@ -1,0 +1,91 @@
+{
+  "eventSchemas": [
+    {
+      "event": "page_view",
+      "description": "Se dispara al montar cada página del frontend.",
+      "properties": {
+        "url": { "type": "string", "description": "URL completa de la página" },
+        "route": { "type": "string", "description": "Ruta relativa (ej. /todos)" },
+        "referrer": { "type": ["string", "null"], "description": "URL de origen o null" }
+      },
+      "example": {
+        "event": "page_view",
+        "timestamp": "2026-11-20T15:00:00.000Z",
+        "user": { "userId": "usr_2a8f1c", "anonymousId": null, "sessionId": "sess_9b3e7d" },
+        "context": { "appVersion": "0.1.0", "env": "production", "route": "/todos" },
+        "properties": { "url": "https://example.com/todos", "route": "/todos", "referrer": "https://example.com/login" }
+      }
+    },
+    {
+      "event": "login_attempted",
+      "description": "Se dispara al intentar iniciar sesión, sin importar el resultado.",
+      "properties": {
+        "method": { "type": "string", "description": "Método de login: 'password', 'oauth', etc." },
+        "success": { "type": "boolean", "description": "True si el login fue exitoso, false si falló" }
+      },
+      "example": {
+        "event": "login_attempted",
+        "timestamp": "2026-11-20T14:59:00.000Z",
+        "user": { "userId": null, "anonymousId": "anon_5f3d9a", "sessionId": "sess_9b3e7d" },
+        "context": { "appVersion": "0.1.0", "env": "production", "route": "/login" },
+        "properties": { "method": "password", "success": true }
+      }
+    },
+    {
+      "event": "todo_created",
+      "description": "Se dispara cuando el usuario crea una nueva tarea.",
+      "properties": {
+        "todo_id": { "type": "string", "description": "Identificador opaco de la tarea creada" }
+      },
+      "example": {
+        "event": "todo_created",
+        "timestamp": "2026-11-20T15:05:00.000Z",
+        "user": { "userId": "usr_2a8f1c", "anonymousId": null, "sessionId": "sess_9b3e7d" },
+        "context": { "appVersion": "0.1.0", "env": "production", "route": "/todos" },
+        "properties": { "todo_id": "todo_4f8e2b" }
+      }
+    },
+    {
+      "event": "todo_completed",
+      "description": "Se dispara cuando el usuario marca una tarea como completada.",
+      "properties": {
+        "todo_id": { "type": "string", "description": "Identificador opaco de la tarea completada" }
+      },
+      "example": {
+        "event": "todo_completed",
+        "timestamp": "2026-11-20T15:10:00.000Z",
+        "user": { "userId": "usr_2a8f1c", "anonymousId": null, "sessionId": "sess_9b3e7d" },
+        "context": { "appVersion": "0.1.0", "env": "production", "route": "/todos" },
+        "properties": { "todo_id": "todo_4f8e2b" }
+      }
+    },
+    {
+      "event": "todo_deleted",
+      "description": "Se dispara cuando el usuario elimina una tarea.",
+      "properties": {
+        "todo_id": { "type": "string", "description": "Identificador opaco de la tarea eliminada" }
+      },
+      "example": {
+        "event": "todo_deleted",
+        "timestamp": "2026-11-20T15:12:00.000Z",
+        "user": { "userId": "usr_2a8f1c", "anonymousId": null, "sessionId": "sess_9b3e7d" },
+        "context": { "appVersion": "0.1.0", "env": "production", "route": "/todos" },
+        "properties": { "todo_id": "todo_4f8e2b" }
+      }
+    },
+    {
+      "event": "contact_created",
+      "description": "Se dispara cuando el usuario crea un nuevo contacto.",
+      "properties": {
+        "contact_id": { "type": "string", "description": "Identificador opaco del contacto creado" }
+      },
+      "example": {
+        "event": "contact_created",
+        "timestamp": "2026-11-20T15:15:00.000Z",
+        "user": { "userId": "usr_2a8f1c", "anonymousId": null, "sessionId": "sess_9b3e7d" },
+        "context": { "appVersion": "0.1.0", "env": "production", "route": "/users" },
+        "properties": { "contact_id": "contact_7d1a9c" }
+      }
+    }
+  ]
+}

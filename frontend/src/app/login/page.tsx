@@ -6,6 +6,7 @@ import { FormEvent, useState } from "react";
 
 import { SiteHeader } from "@/components/site-header";
 import { useAuth } from "@/context/auth-context";
+import { guardEvent } from "@/lib/telemetry";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,6 +19,10 @@ export default function LoginPage() {
     event.preventDefault();
     setError("");
     const signedIn = await login(email, password);
+    guardEvent("login_attempted", {
+      method: "password",
+      success: signedIn,
+    });
     if (!signedIn) {
       setError("Correo o contraseña incorrectos.");
       return;
