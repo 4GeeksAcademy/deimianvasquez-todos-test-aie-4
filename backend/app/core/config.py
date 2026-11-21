@@ -8,6 +8,7 @@ BACKEND_DIR = APP_DIR.parent
 
 class Settings(BaseSettings):
     tinydb_path: Path = BACKEND_DIR / "data" / "db.json"
+    telemetry_db_path: Path = BACKEND_DIR / "data" / "telemetry.json"
     admin_email: str = "dvasquez@4geeksacademy.com"
     secret_key: str = "dev-secret-change-me-for-local-only"
     algorithm: str = "HS256"
