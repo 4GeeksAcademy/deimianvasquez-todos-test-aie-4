@@ -36,6 +36,16 @@ def count_all() -> int:
     return len(events)
 
 
+def count_by_event() -> dict[str, int]:
+    """Devuelve un diccionario con la cantidad de eventos por tipo."""
+    all_events = events.all()
+    counts: dict[str, int] = {}
+    for event in all_events:
+        name = event["event"]
+        counts[name] = counts.get(name, 0) + 1
+    return counts
+
+
 def delete_all() -> int:
     """Elimina todos los eventos y devuelve cuántos se borraron."""
     total = len(events)

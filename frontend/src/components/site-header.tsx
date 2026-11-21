@@ -26,6 +26,9 @@ export function SiteHeader() {
               Usuarios
             </Link>
           ) : null}
+          <Link href="/dashboard" className="px-2 text-sm font-medium text-stone-300">
+            Dashboard
+          </Link>
           <Link
             href="/todos"
             className="rounded-full bg-stone-100 px-4 py-2 text-sm font-medium text-stone-950"

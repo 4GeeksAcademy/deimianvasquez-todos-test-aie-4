@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.auth.router import router as auth_router
 from app.db.database import db
+from app.other.router import router as contacts_router
 from app.tasks.router import router as tasks_router
 from app.telemetry.router import router as telemetry_router
 from app.users.router import router as users_router
@@ -22,6 +23,7 @@ app.state.db = db
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(tasks_router)
+app.include_router(contacts_router)
 app.include_router(telemetry_router)
 
 @app.get("/")

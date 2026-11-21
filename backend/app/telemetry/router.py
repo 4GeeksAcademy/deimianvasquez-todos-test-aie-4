@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query
 
-from app.telemetry.repository import count_all, delete_all, insert_events_batch, list_by_event, list_recent
+from app.telemetry.repository import count_all, count_by_event, delete_all, insert_events_batch, list_all, list_by_event, list_recent
 from app.telemetry.schemas import TelemetryBatch, TelemetryEventPublic
 
 router = APIRouter(prefix="/telemetry", tags=["telemetry"])
@@ -44,10 +44,21 @@ def read_events(
     return [TelemetryEventPublic.from_document(e) for e in raw_events]
 
 
-@router.get("/events/summary")
-def read_summary():
-    """Devuelve un resumen con el total de eventos almacenados."""
-    return {"total_events": count_all()}
+@router.get("/stats")
+def read_stats():
+    """Devuelve estadísticas agregadas de telemetría.
+
+    - total_events: número total de eventos
+    - by_event: desglose por tipo de evento
+    - recent_events: últimos 10 eventos
+    """
+    by_event = count_by_event()
+    recent = list_recent(10)
+    return {
+        "total_events": count_all(),
+        "by_event": by_event,
+        "recent_events": [TelemetryEventPublic.from_document(e) for e in recent],
+    }
 
 
 @router.delete("/events", status_code=200)

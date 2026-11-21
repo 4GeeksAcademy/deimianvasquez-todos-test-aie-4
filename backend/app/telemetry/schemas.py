@@ -47,4 +47,10 @@ class TelemetryEventPublic(BaseModel):
 
     @classmethod
     def from_document(cls, document):
-        return cls.model_validate({"id": document.doc_id, **document})
+        data = {"id": document.doc_id, **document}
+        # Eventos generados desde el backend pueden no tener user/context
+        if "user" not in data:
+            data["user"] = {"userId": None, "anonymousId": None, "sessionId": "server"}
+        if "context" not in data:
+            data["context"] = {"appVersion": "0.1.0", "env": "development", "route": "/unknown"}
+        return cls.model_validate(data)

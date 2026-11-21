@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { SiteHeader } from "@/components/site-header";
 import { useAuth } from "@/context/auth-context";
+import { guardEvent } from "@/lib/telemetry";
 import { hasAccount } from "@/lib/account";
 import { api } from "@/lib/api";
 
@@ -79,8 +80,26 @@ export default function TodosPage() {
       return;
     }
     const updated: Task = await response.json();
+    if (updated.done) {
+      guardEvent("todo_completed", { todo_id: updated.id });
+    }
     setTasks((current) =>
       current?.map((item) => (item.id === updated.id ? updated : item)) ?? null,
+    );
+  }
+
+  async function removeTask(task: Task) {
+    setError("");
+    const response = await api(`/tasks/${task.id}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      setError("No se pudo eliminar la tarea.");
+      return;
+    }
+    guardEvent("todo_deleted", { todo_id: task.id });
+    setTasks((current) =>
+      current?.filter((item) => item.id !== task.id) ?? null,
     );
   }
 
@@ -100,6 +119,7 @@ export default function TodosPage() {
       return;
     }
     const created: Task = await response.json();
+    guardEvent("todo_created", { todo_id: created.id });
     setTasks((current) => (current ? [...current, created] : [created]));
     setTitle("");
   }
@@ -238,6 +258,13 @@ export default function TodosPage() {
                     className="rounded-full border border-stone-600 px-4 py-2 text-sm text-stone-100"
                   >
                     {task.done ? "Reabrir" : "Finalizar"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeTask(task)}
+                    className="rounded-full border border-red-700 px-4 py-2 text-sm text-red-400"
+                  >
+                    Eliminar
                   </button>
                 </div>
               </li>
