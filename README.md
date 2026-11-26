@@ -173,4 +173,4 @@ Se mockea la API.
 - Marcar hecha y borrar llaman a `PATCH` y `DELETE` de esa tarea.
 
 No hace falta un navegador real para estos casos. Playwright queda para después, si se quiere recorrer registro, login y lista en un solo flujo.
-# hola 
+# hola ¿qué tal?
