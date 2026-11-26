@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: "3.13"
       - name: Install backend dependencies
-        run: python -m pip install pytest "fastapi[standard]" bcrypt pyjwt resend tinydb
+        run: python -m pip install pytest "fastapi[standard]" pandas bcrypt pyjwt resend tinydb
       - name: Run backend tests
         working-directory: backend
         run: python -m pytest

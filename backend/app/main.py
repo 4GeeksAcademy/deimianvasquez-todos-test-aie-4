@@ -13,7 +13,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://terrible-skeleton-ppgwrqgxx5r27p6j-3000.app.github.dev"
+        "https://reimagined-fortnight-r6xggqqp95cppqq-3000.app.github.dev"
     ],
     allow_credentials=True,
     allow_methods=["*"],
