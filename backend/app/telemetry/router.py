@@ -1,5 +1,8 @@
-from fastapi import APIRouter, Query
+from datetime import datetime, timedelta, timezone
 
+from fastapi import APIRouter, HTTPException, Query
+
+from app.telemetry.cache import clear_telemetry_report_cache, get_cached_telemetry_report
 from app.telemetry.repository import count_all, count_by_event, delete_all, insert_events_batch, list_all, list_by_event, list_recent
 from app.telemetry.schemas import TelemetryBatch, TelemetryEventPublic
 
@@ -17,12 +20,39 @@ def receive_events(batch: TelemetryBatch):
     events_data = [event.model_dump(mode="json") for event in batch.events]
 
     insert_events_batch(events_data)
+    clear_telemetry_report_cache()
 
     print(f"[telemetry] Recibidos {len(events_data)} evento(s):")
     for event in events_data:
         print(f"  → {event['event']} | {event['timestamp']} | ruta: {event['context']['route']}")
 
     return {"ok": True, "count": len(events_data)}
+
+
+@router.get("/report")
+def read_report(
+    start_date: datetime | None = Query(None, description="Inicio inclusivo del periodo, ISO 8601"),
+    end_date: datetime | None = Query(None, description="Fin exclusivo del periodo, ISO 8601"),
+):
+    """Devuelve métricas operacionales con cache TTL de 60 segundos."""
+    now = datetime.now(timezone.utc)
+    resolved_end = end_date or now
+    resolved_start = start_date or (resolved_end - timedelta(days=7))
+
+    # Interpretar valores ISO sin zona como UTC y normalizar los demás offsets.
+    if resolved_start.tzinfo is None:
+        resolved_start = resolved_start.replace(tzinfo=timezone.utc)
+    else:
+        resolved_start = resolved_start.astimezone(timezone.utc)
+    if resolved_end.tzinfo is None:
+        resolved_end = resolved_end.replace(tzinfo=timezone.utc)
+    else:
+        resolved_end = resolved_end.astimezone(timezone.utc)
+
+    if resolved_start >= resolved_end:
+        raise HTTPException(status_code=422, detail="start_date must be earlier than end_date")
+
+    return get_cached_telemetry_report(resolved_start, resolved_end)
 
 
 @router.get("/events", response_model=list[TelemetryEventPublic])
