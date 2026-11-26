@@ -174,3 +174,4 @@ Se mockea la API.
 
 No hace falta un navegador real para estos casos. Playwright queda para después, si se quiere recorrer registro, login y lista en un solo flujo.
 # hola ¿qué tal?
+# bien y tú?
